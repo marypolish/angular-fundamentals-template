@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { debounceTime } from 'rxjs';
 import {
   combineLatest,
   filter,
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
     // 1.1. Add functionality to changeCharactersInput method. Changes searchTermByCharacters Subject value on input change.
     const inputValue: string = element.target.value;
     // YOUR CODE STARTS HERE
-
+    this.searchTermByCharacters.next(inputValue);
     // YOUR CODE ENDS HERE
   }
 
@@ -46,11 +47,14 @@ export class AppComponent implements OnInit, OnDestroy {
     // 3. Add debounce to prevent API calls until user stop typing.
 
     this.charactersResults$ = this.searchTermByCharacters
-        .pipe
+        .pipe(
         // YOUR CODE STARTS HERE
-
+       filter((term: string) => term.length >= 3),
+      debounceTime(500),
+      switchMap((term: string) => this.mockDataService.getCharacters(term))  
+      );
         // YOUR CODE ENDS HERE
-        ();
+        
   }
 
   loadCharactersAndPlanet(): void {
