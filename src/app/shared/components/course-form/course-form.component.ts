@@ -15,16 +15,12 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
   styleUrls: ["./course-form.component.scss"],
 })
 export class CourseFormComponent implements OnInit {
-  courseForm!: FormGroup;
+  courseForm: FormGroup;
   authorsList: { id: number; name: string }[] = [];
   courseAuthors: { id: number; name: string }[] = [];
 
   constructor(public fb: FormBuilder, public library: FaIconLibrary) {
     library.addIconPacks(fas);
-  }
-
-  ngOnInit(): void {
-    // Ініціалізація форми за допомогою FormBuilder
     this.courseForm = this.fb.group({
       title: ["", [Validators.required, Validators.minLength(2)]],
       description: ["", [Validators.required, Validators.minLength(2)]],
@@ -32,7 +28,10 @@ export class CourseFormComponent implements OnInit {
       author: ["", [Validators.required, Validators.minLength(2)]],
       authors: this.fb.array([]),
     });
+  }
 
+  ngOnInit(): void {
+    // Ініціалізація форми за допомогою FormBuilder
     this.authorsList = [
       { id: 1, name: "Author One" },
       { id: 2, name: "Author Two" },
@@ -72,7 +71,7 @@ export class CourseFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.courseForm.valid) {
-      console.log('Form Submitted!', this.courseForm.value);
+      console.log("Form Submitted!", this.courseForm.value);
     }
   }
   // Use the names `title`, `description`, `author`, 'authors' (for authors list), `duration` for the form controls.
