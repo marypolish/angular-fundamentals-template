@@ -25,7 +25,14 @@ export class CourseFormComponent implements OnInit {
       title: ["", [Validators.required, Validators.minLength(2)]],
       description: ["", [Validators.required, Validators.minLength(2)]],
       duration: [0, [Validators.required, Validators.min(0)]],
-      author: ["", [Validators.required, Validators.minLength(2)]],
+      author: [
+        "",
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern(/^[a-zA-Z\s]*$/),
+        ],
+      ],
       authors: this.fb.array([]),
     });
   }

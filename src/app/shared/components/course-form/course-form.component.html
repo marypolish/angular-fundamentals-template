@@ -93,7 +93,7 @@
           <ul>
             <li *ngFor="let author of authorsList">
               {{ author.name }}
-              <button (click)="addAuthor(author)">Add author</button>
+              <button type="button" (click)="addAuthor(author)">Add author</button>
             </li>
           </ul>
         </div>
