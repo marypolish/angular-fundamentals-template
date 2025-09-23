@@ -16,7 +16,8 @@
             class="text-danger"
             *ngIf="
               registrationForm.get('name')?.invalid &&
-              (registrationForm.get('name')?.touched || registrationForm.get('name')?.dirty)
+              (registrationForm.get('name')?.touched ||
+                registrationForm.get('name')?.dirty)
             "
           >
             <div *ngIf="registrationForm.get('name')?.errors?.['required']">
@@ -30,17 +31,19 @@
         <div class="form__control">
           <label for="email">Email</label>
           <input
-            type="text"
+            type="email"
             id="email"
             placeholder="Input text"
             formControlName="email"
+            appEmailValidator
           />
           <span
             id="emailErrorMessage"
             class="text-danger"
             *ngIf="
               registrationForm.get('email')?.invalid &&
-              (registrationForm.get('email')?.touched || registrationForm.get('email')?.dirty)
+              (registrationForm.get('email')?.touched ||
+                registrationForm.get('email')?.dirty)
             "
           >
             <div *ngIf="registrationForm.get('email')?.errors?.['required']">
@@ -64,7 +67,8 @@
             class="text-danger"
             *ngIf="
               registrationForm.get('password')?.invalid &&
-              (registrationForm.get('password')?.touched || registrationForm.get('password')?.dirty)
+              (registrationForm.get('password')?.touched ||
+                registrationForm.get('password')?.dirty)
             "
           >
             <div *ngIf="registrationForm.get('password')?.errors?.['required']">

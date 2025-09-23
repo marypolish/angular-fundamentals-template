@@ -1,20 +1,21 @@
 import { Directive, forwardRef } from "@angular/core";
-import { Validator, AbstractControl, NG_VALIDATORS } from "@angular/forms";
+import { Validator, NG_VALIDATORS, FormControl } from "@angular/forms";
 
 @Directive({
-  selector: "[emailValidator]",
+  selector: "[appEmailValidator]",
   providers: [
     {
       provide: NG_VALIDATORS,
-      useExisting: EmailValidatorDirective,
+      useExisting: forwardRef(() => EmailValidatorDirective),
       multi: true,
     },
   ],
 })
 export class EmailValidatorDirective implements Validator{
-  validate(control: AbstractControl): { [key: string]: any } | null {
+  validate(control: FormControl): { [key: string]: any } | null {
+    const email = control.value;
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (control.value && !emailPattern.test(control.value)) {
+    if (email && !emailPattern.test(email)) {
         return { 'emailInvalid': true };
     }
     return null;
