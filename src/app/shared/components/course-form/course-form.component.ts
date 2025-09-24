@@ -14,7 +14,7 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
   templateUrl: "./course-form.component.html",
   styleUrls: ["./course-form.component.scss"],
 })
-export class CourseFormComponent implements OnInit {
+export class CourseComponent implements OnInit {
   courseForm: FormGroup;
   authorsList: { id: number; name: string }[] = [];
   courseAuthors: { id: number; name: string }[] = [];
@@ -25,15 +25,16 @@ export class CourseFormComponent implements OnInit {
       title: ["", [Validators.required, Validators.minLength(2)]],
       description: ["", [Validators.required, Validators.minLength(2)]],
       duration: [0, [Validators.required, Validators.min(0)]],
-      author: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.pattern(/^[a-zA-Z\s]*$/),
-        ],
-      ],
       authors: this.fb.array([]),
+      newAuthor: this.fb.group({
+        authorName: [
+          "",
+          [
+            Validators.minLength(2),
+            Validators.pattern(/^[a-zA-Z0-9\s]*$/),
+          ],
+        ],
+      }),
     });
   }
 
@@ -45,34 +46,42 @@ export class CourseFormComponent implements OnInit {
     ];
   }
 
+   get courseAuthorsArray(): FormArray {
+    return this.courseForm.get("authors") as FormArray;
+  }
+  
+  get newAuthorControl(): FormControl {
+      return this.courseForm.get('newAuthor.authorName') as FormControl;
+  }
+
   addAuthor(author: { id: number; name: string }): void {
     this.courseAuthors.push(author);
     this.authorsList = this.authorsList.filter((a) => a.id !== author.id);
-    (this.courseForm.get("authors") as FormArray).push(
-      new FormControl(author.id)
-    );
+    this.courseAuthorsArray.push(this.fb.control(author.id));
   }
 
   removeAuthor(author: { id: number; name: string }): void {
     this.authorsList.push(author);
     this.courseAuthors = this.courseAuthors.filter((a) => a.id !== author.id);
 
-    const authorsArray = this.courseForm.get("authors") as FormArray;
-    const index = authorsArray.controls.findIndex((c) => c.value === author.id);
+    const index = this.courseAuthorsArray.controls.findIndex((c) => c.value === author.id);
     if (index !== -1) {
-      authorsArray.removeAt(index);
+      this.courseAuthorsArray.removeAt(index);
     }
   }
 
   createAuthor(): void {
-    const newAuthorName = this.courseForm.get("author")?.value;
-    if (newAuthorName) {
+    const newAuthorName = this.newAuthorControl.value;
+
+    if (newAuthorName && this.newAuthorControl.valid) {
       const newAuthor = {
         id: Math.floor(Math.random() * 1000),
         name: newAuthorName,
       };
+      
       this.authorsList.push(newAuthor);
-      this.courseForm.get("author")?.reset();
+    
+      this.newAuthorControl.reset();
     }
   }
 
@@ -81,5 +90,4 @@ export class CourseFormComponent implements OnInit {
       console.log("Form Submitted!", this.courseForm.value);
     }
   }
-  // Use the names `title`, `description`, `author`, 'authors' (for authors list), `duration` for the form controls.
 }

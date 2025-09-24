@@ -23,8 +23,8 @@
       <app-button [buttonText]="'SHOW COURSE'"
         (click)="onShowCourse()"></app-button>
       <div class="course-card__buttons" *ngIf="editable">
-        <app-button *ngIf="editable" [iconName]="'edit'"></app-button>
-        <app-button *ngIf="editable" [iconName]="'delete'"></app-button>
+        <app-button *ngIf="editable" [iconName]="'edit'" (click)="onEditCourse()"></app-button>
+        <app-button *ngIf="editable" [iconName]="'delete'" (click)="onDeleteCourse()"></app-button>
         <!--Enter your code here-->
       </div>
     </div>

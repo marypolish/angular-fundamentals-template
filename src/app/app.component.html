@@ -12,27 +12,27 @@
 <div class="app-root">
   <div *ngIf="selectedCourse" class="course-info-container">
     <div class="course-info-header">
-      <h2>{{selectedCourse.title}}</h2>
+      <h2>{{ selectedCourse.title }}</h2>
     </div>
     <div class="course-info-content">
       <div class="course-info-description">
         <p><b>Description:</b></p>
-        <p>{{selectedCourse.description}}</p>
+        <p>{{ selectedCourse.description }}</p>
       </div>
       <div class="course-info-details">
-        <p><b>ID:</b> {{selectedCourse.id}}</p>
-        <p><b>Duration:</b> {{selectedCourse.duration}} min</p>
-        <p><b>Created:</b> {{selectedCourse.creationDate | date}}</p>
-        <p><b>Authors:</b> {{selectedCourse.authors.join(', ')}}</p>
+        <p><b>ID:</b> {{ selectedCourse.id }}</p>
+        <p><b>Duration:</b> {{ selectedCourse.duration }} min</p>
+        <p><b>Created:</b> {{ selectedCourse.creationDate | date }}</p>
+        <p><b>Authors:</b> {{ selectedCourse.authors.join(", ") }}</p>
       </div>
     </div>
     <div class="course-info-actions">
-      <app-button 
-        [buttonText]="'BACK'" 
-        (click)="onBackClick()"
-      ></app-button>
+      <app-button [buttonText]="'BACK'" (click)="onBackClick()"></app-button>
     </div>
   </div>
+
+<!-- <app-registration-form></app-registration-form>-->
+<!-- <app-login-form></app-login-form>-->
 
   <div *ngIf="!selectedCourse">
     <app-info
@@ -57,4 +57,6 @@
       <app-button [iconName]="'delete'"></app-button>
     </app-course-card>
   </div>
+
+  
 </div>

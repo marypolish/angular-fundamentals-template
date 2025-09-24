@@ -11,7 +11,7 @@
             placeholder="Input text"
             formControlName="name"
           />
-          <span
+          <div
             id="nameErrorMessage"
             class="text-danger"
             *ngIf="
@@ -26,7 +26,7 @@
             <div *ngIf="registrationForm.get('name')?.errors?.['minlength']">
               Name must be at least 6 characters long.
             </div>
-          </span>
+          </div>
         </div>
         <div class="form__control">
           <label for="email">Email</label>
@@ -37,7 +37,7 @@
             formControlName="email"
             appEmailValidator
           />
-          <span
+          <div
             id="emailErrorMessage"
             class="text-danger"
             *ngIf="
@@ -49,10 +49,10 @@
             <div *ngIf="registrationForm.get('email')?.errors?.['required']">
               Email is required.
             </div>
-            <div *ngIf="registrationForm.get('email')?.errors?.['email']">
+            <div *ngIf="registrationForm.get('email')?.errors?.['emailInvalid']">
               Please enter a valid email address.
             </div>
-          </span>
+          </div>
         </div>
         <div class="form__control">
           <label for="password">Password</label>
@@ -62,7 +62,7 @@
             placeholder="Input text"
             formControlName="password"
           />
-          <span
+          <div
             id="passwordErrorMessage"
             class="text-danger"
             *ngIf="
@@ -74,11 +74,11 @@
             <div *ngIf="registrationForm.get('password')?.errors?.['required']">
               Password is required.
             </div>
-          </span>
+          </div>
         </div>
       </div>
       <div class="form__action">
-        <app-button type="submit">LOGIN</app-button>
+        <app-button type="submit"[buttonText]="'REGISTER'"></app-button>
       </div>
       <div class="form__text">
         If you have an account you may <strong>Login</strong>
