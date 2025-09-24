@@ -11,20 +11,32 @@
         {{ authors }}
       </div>
       <div>
-        <b>Duration: </b
-        ><span class="course-card__duration">{{ duration }}</span>
+        <b>Duration:</b>
+        <span class="course-card__duration">{{ duration | duration }}</span>
       </div>
-      <div>
-        <b>Created: </b
-        ><span class="course-card__date">{{ creationDate }}</span>
+      <div class="course-card__info-text">
+        <b>Created:</b>
+        <span class="course-card__info-date">{{
+          creationDate | customDate
+        }}</span>
       </div>
     </div>
     <div class="course-card__info-actions">
-      <app-button [buttonText]="'SHOW COURSE'"
-        (click)="onShowCourse()"></app-button>
+      <app-button
+        [buttonText]="'SHOW COURSE'"
+        (click)="onShowCourse()"
+      ></app-button>
       <div class="course-card__buttons" *ngIf="editable">
-        <app-button *ngIf="editable" [iconName]="'edit'" (click)="onEditCourse()"></app-button>
-        <app-button *ngIf="editable" [iconName]="'delete'" (click)="onDeleteCourse()"></app-button>
+        <app-button
+          *ngIf="editable"
+          [iconName]="'edit'"
+          (click)="onEditCourse()"
+        ></app-button>
+        <app-button
+          *ngIf="editable"
+          [iconName]="'delete'"
+          (click)="onDeleteCourse()"
+        ></app-button>
         <!--Enter your code here-->
       </div>
     </div>

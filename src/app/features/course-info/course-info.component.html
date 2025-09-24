@@ -6,19 +6,30 @@
     {{ description }}
   </div>
   <div class="course-info__info">
-    <div><b>ID: </b><span class="course-info__info-id">{{ id }}</span></div>
-    <div><b>Duration: </b><span class="course-info__info-duration">{{ duration | duration }}</span></div>
-    <div><b>Created: </b><span class="course-info__info-date">{{ creationDate | date:'mediumDate' }}</span></div>
-    <div><b>Authors: </b><span class="course-info__info-authors">{{ authors.join(', ') }}</span></div>
+    <div>
+      <b>ID:</b> <span class="course-info_info-id">{{ id }}</span>
+    </div>
+    <div>
+      <b>Created:</b>
+      <span class="course-info_info-date">{{ creationDate | customDate }}</span>
+    </div>
+    <div>
+      <b>Duration:</b>
+      <span class="course-info_info-duration">{{ duration | duration }}</span>
+    </div>
+    <div>
+      <b>Authors:</b>
+      <span class="course-info_info-authors">{{ authors.join(", ") }}</span>
+    </div>
   </div>
-</div>
-<div class="navigation-block">
-  <button>Back</button>
+  <div class="navigation-block">
+    <button>Back</button>
 
     <ng-container *ngIf="editable">
-        <button class="edit-btn" (click)="onEditClick()">Edit</button>
-        <button class="delete-btn" (click)="onDeleteClick()">Delete</button>
+      <button class="edit-btn" (click)="onEditClick()">Edit</button>
+      <button class="delete-btn" (click)="onDeleteClick()">Delete</button>
     </ng-container>
 
     <ng-content></ng-content>
+  </div>
 </div>

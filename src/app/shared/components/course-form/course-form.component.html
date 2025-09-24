@@ -58,34 +58,38 @@
       <h3>Authors</h3>
       <div class="form__control">
         <div class="course__flex">
-          <input
-            type="text"
-            id="author"
-            placeholder="Input Author Name"
-            formControlName="author"
-          />
-          <button
-            id="createAuthor"
-            (click)="createAuthor()"
-            [disabled]="courseForm.get('author')?.invalid"
-          >
-            CREATE AUTHOR
-          </button>
+          <div formGroupName="newAuthor" class="form__control">
+            <div class="course__flex">
+              <input
+                type="text"
+                id="authorName"
+                placeholder="Input Author Name"
+                formControlName="authorName"
+              />
+              <app-button
+                [buttonText]="'CREATE AUTHOR'"
+                (click)="createAuthor()"
+                [disabled]="newAuthorControl.invalid"
+                type="button"
+              ></app-button>
+            </div>
+          </div>
         </div>
         <span
           id="authorErrorMessage"
           class="text-danger"
           *ngIf="
-            courseForm.get('author')?.invalid &&
-            (courseForm.get('author')?.touched ||
-              courseForm.get('author')?.dirty)
+            newAuthorControl.invalid &&
+            (newAuthorControl.touched ||
+              newAuthorControl.dirty ||
+              courseForm.submitted)
           "
         >
-          <div *ngIf="courseForm.get('author')?.errors?.['required']">
-            Author is required.
+          <div *ngIf="newAuthorControl.errors?.['minlength']">
+            Author name must be at least 2 characters long.
           </div>
-          <div *ngIf="courseForm.get('author')?.errors?.['minlength']">
-            Author must be at least 2 characters long.
+          <div *ngIf="newAuthorControl.errors?.['pattern']">
+            Author name must contain only Latin letters and numbers.
           </div>
         </span>
         <div class="course__authors">
@@ -93,7 +97,11 @@
           <ul>
             <li *ngFor="let author of authorsList">
               {{ author.name }}
-              <button type="button" (click)="addAuthor(author)">Add author</button>
+              <app-button
+                [buttonText]="'ADD AUTHOR'"
+                type="button"
+                (click)="addAuthor(author)"
+              ></app-button>
             </li>
           </ul>
         </div>
@@ -103,7 +111,11 @@
           <ul>
             <li *ngFor="let author of courseAuthors">
               {{ author.name }}
-              <button (click)="removeAuthor(author)">Delete author</button>
+              <app-button
+                [buttonText]="'DELETE AUTHOR'"
+                type="button"
+                (click)="removeAuthor(author)"
+              ></app-button>
             </li>
           </ul>
         </div>
@@ -140,8 +152,12 @@
         </span>
       </div>
       <div class="form__action">
-        <button type="button">CANCEL</button>
-        <button type="submit" [disabled]="courseForm.invalid">SAVE</button>
+        <app-button [buttonText]="'CANCEL'" type="button"></app-button>
+        <app-button
+          [buttonText]="'SAVE'"
+          type="submit"
+          [disabled]="courseForm.invalid"
+        ></app-button>
       </div>
     </div>
   </div>
