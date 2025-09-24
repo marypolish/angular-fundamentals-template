@@ -80,9 +80,7 @@
           class="text-danger"
           *ngIf="
             newAuthorControl.invalid &&
-            (newAuthorControl.touched ||
-              newAuthorControl.dirty ||
-              courseForm.submitted)
+            (newAuthorControl.touched || newAuthorControl.dirty)
           "
         >
           <div *ngIf="newAuthorControl.errors?.['minlength']">
