@@ -1,11 +1,13 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from "rxjs";
+import { map } from 'rxjs/operators';
 
 interface Author {
   id: string;
   name: string;
 }
+
 interface Course {
   id: string;
   title: string;
@@ -14,11 +16,17 @@ interface Course {
   authors: string[];
   creationDate: string;
 }
+
 interface CourseUpdateData {
   title: string;
   description: string;
   duration: number;
   authors: string[];
+}
+
+interface ApiResponse<T> {
+  successful: boolean;
+  result: T;
 }
 
 @Injectable({
@@ -28,41 +36,61 @@ export class CoursesService {
   private apiUrl = "http://localhost:4000/api";
 
   constructor(private http: HttpClient) {}
-  getAll(): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.apiUrl}/courses/all`);
+  getAllCourses(): Observable<Course[]> {
+    return this.http
+      .get<ApiResponse<Course[]>>(`${this.apiUrl}/courses/all`)
+      .pipe(map((response) => response.result));
   }
 
-  createCourse(courseData: CourseUpdateData): Observable<Course> {
-    return this.http.post<Course>(`${this.apiUrl}/courses/add`, courseData);
+  createCourse(course: Course): Observable<Course> {
+    return this.http
+      .post<ApiResponse<Course>>(`${this.apiUrl}/courses/add`, course)
+      .pipe(map((response) => response.result));
   }
 
-  editCourse(id: string, courseData: CourseUpdateData): Observable<Course> {
-    return this.http.put<Course>(`${this.apiUrl}/courses/${id}`, courseData);
+  editCourse(id: string, course: Course): Observable<Course> {
+    return this.http
+      .put<ApiResponse<Course>>(`${this.apiUrl}/courses/${id}`, course)
+      .pipe(map((response) => response.result));
   }
 
-  getCourse(id: string): Observable<Course> {
-    return this.http.get<Course>(`${this.apiUrl}/courses/${id}`);
+   getCourseById(id: string): Observable<Course> {
+    return this.http
+      .get<ApiResponse<Course>>(`${this.apiUrl}/courses/${id}`)
+      .pipe(map((response) => response.result));
   }
 
-  deleteCourse(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/courses/${id}`);
+  deleteCourse(id: string): Observable<boolean> {
+    return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/courses/${id}`).pipe(
+      map((response) => response.successful)
+    );
   }
 
-  filterCourses(textFragment: string): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.apiUrl}/courses/all`, {
-      params: { title: textFragment },
-    });
+  filterCourses(title: string): Observable<Course[]> {
+    let params = new HttpParams();
+    if (title) {
+      params = params.set('title', title); 
+    }
+    return this.http
+      .get<ApiResponse<Course[]>>(`${this.apiUrl}/courses/all`, { params })
+      .pipe(map((response) => response.result));
   }
 
-  getAllAuthors(): Observable<Author[]> {
-    return this.http.get<Author[]>(`${this.apiUrl}/authors/all`);
+  getAuthors(): Observable<Author[]> {
+    return this.http
+      .get<ApiResponse<Author[]>>(`${this.apiUrl}/authors/all`)
+      .pipe(map((response) => response.result));
   }
 
-  createAuthor(name: string): Observable<Author> {
-    return this.http.post<Author>(`${this.apiUrl}/authors/add`, { name });
+  createAuthor(author: Author): Observable<Author> {
+    return this.http
+      .post<ApiResponse<Author>>(`${this.apiUrl}/authors/add`, author)
+      .pipe(map((response) => response.result));
   }
 
   getAuthorById(id: string): Observable<Author> {
-    return this.http.get<Author>(`${this.apiUrl}/authors/${id}`);
+    return this.http
+      .get<ApiResponse<Author>>(`${this.apiUrl}/authors/${id}`)
+      .pipe(map((response) => response.result));
   }
 }

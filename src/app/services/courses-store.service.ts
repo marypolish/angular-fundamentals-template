@@ -39,47 +39,61 @@ export class CoursesStoreService {
     this.isLoading$$.next(value);
   }
 
-  getAll(): void {
+  getAllCourses(): void {
     this.setLoading(true);
     this.coursesService
-      .getAll()
+      .getAllCourses()
       .pipe(finalize(() => this.setLoading(false)))
       .subscribe({
-        next: (courses) => this.courses$$.next(courses),
-        error: (err) => console.error("Error loading courses:", err),
+        next: (courses: Course[]) => this.courses$$.next(courses),
+        error: (err: any) => console.error("Error loading courses:", err),
       });
   }
 
   createCourse(courseData: CourseUpdateData): void {
     this.setLoading(true);
+
+    const newCourse: Course = {
+      ...courseData,
+      id: "temp-id-for-service", 
+      creationDate: new Date().toISOString(), 
+    };
+
     this.coursesService
-      .createCourse(courseData)
+      .createCourse(newCourse)
       .pipe(finalize(() => this.setLoading(false)))
       .subscribe({
-        next: (newCourse) => {
-          this.courses$$.next([...this.courses$$.value, newCourse]);
+        next: (newCourseFromServer: Course) => {
+          this.courses$$.next([...this.courses$$.value, newCourseFromServer]);
         },
-        error: (err) => console.error("Error creating course:", err),
+        error: (err: any) => console.error("Error creating course:", err),
       });
   }
 
-  getCourse(id: string): Observable<Course> {
-    return this.coursesService.getCourse(id);
+  getCourseById(id: string): Observable<Course> {
+    return this.coursesService.getCourseById(id);
   }
 
   editCourse(id: string, courseData: CourseUpdateData): void {
     this.setLoading(true);
+    
+    const updatedCourse: Course = {
+      ...courseData,
+      id: id,
+      creationDate: new Date().toISOString(), 
+    };
+
     this.coursesService
-      .editCourse(id, courseData)
+      .editCourse(id, updatedCourse)
       .pipe(finalize(() => this.setLoading(false)))
       .subscribe({
-        next: (updatedCourse) => {
+        next: (updatedCourseFromServer: Course) => {
           const updatedCourses = this.courses$$.value.map((course) =>
-            course.id === id ? updatedCourse : course
+            course.id === id ? updatedCourseFromServer : course
           );
           this.courses$$.next(updatedCourses);
         },
-        error: (err) => console.error("Error editing course:", err),
+        error: (err: any) => console.error("Error editing course:", err),
       });
   }
 
@@ -95,7 +109,7 @@ export class CoursesStoreService {
           );
           this.courses$$.next(filteredCourses);
         },
-        error: (err) => console.error("Error deleting course:", err),
+        error: (err: any) => console.error("Error deleting course:", err),
       });
   }
 
@@ -105,32 +119,35 @@ export class CoursesStoreService {
       .filterCourses(textFragment)
       .pipe(finalize(() => this.setLoading(false)))
       .subscribe({
-        next: (filteredCourses) => this.courses$$.next(filteredCourses),
-        error: (err) => console.error("Error filtering courses:", err),
+        next: (filteredCourses: Course[]) =>
+          this.courses$$.next(filteredCourses),
+        error: (err: any) => console.error("Error filtering courses:", err),
       });
   }
 
-  getAllAuthors(): void {
+  getAuthors(): void {
     this.setLoading(true);
     this.coursesService
-      .getAllAuthors()
+      .getAuthors()
       .pipe(finalize(() => this.setLoading(false)))
       .subscribe({
-        next: (authors) => this.authors$$.next(authors),
-        error: (err) => console.error("Error loading authors:", err),
+        // Виправлено: додано явний тип Author[]
+        next: (authors: Author[]) => this.authors$$.next(authors),
+        // Виправлено: додано явний тип any для err
+        error: (err: any) => console.error("Error loading authors:", err),
       });
   }
 
-  createAuthor(name: string): void {
+  createAuthor(author: Author): void {
     this.setLoading(true);
     this.coursesService
-      .createAuthor(name)
+      .createAuthor(author)
       .pipe(finalize(() => this.setLoading(false)))
       .subscribe({
-        next: (newAuthor) => {
+        next: (newAuthor: Author) => {
           this.authors$$.next([...this.authors$$.value, newAuthor]);
         },
-        error: (err) => console.error("Error creating author:", err),
+        error: (err: any) => console.error("Error creating author:", err),
       });
   }
 

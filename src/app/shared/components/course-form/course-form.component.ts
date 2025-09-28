@@ -73,7 +73,7 @@ export class CourseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.coursesStore.getAllAuthors();
+    this.coursesStore.getAuthors();
 
     this.authorSubscription = this.allAuthors$.subscribe((allAuthors) => {
       this.authorsList = allAuthors.filter(
@@ -87,7 +87,7 @@ export class CourseComponent implements OnInit {
 
       if (this.isEditMode && this.courseId) {
         this.coursesStore
-          .getCourse(this.courseId)
+          .getCourseById(this.courseId)
           .subscribe((course: Course) => {
             this.courseForm.patchValue({
               title: course.title,
@@ -99,7 +99,7 @@ export class CourseComponent implements OnInit {
               course.authors.forEach((authorId) => {
                 const author = all.find((a) => a.id === authorId);
                 if (author) {
-                  this.addAuthor(author as any);
+                  this.addAuthor(author);
                 }
               });
             });
