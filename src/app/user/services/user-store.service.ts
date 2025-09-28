@@ -2,6 +2,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UserService } from './user.service';
 
+interface UserInfo {
+    name: string;
+    email: string;
+    role: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -15,12 +21,13 @@ export class UserStoreService {
     constructor(private userService: UserService) { }
 
     getUser(): void {
-        this.userService.getUser().subscribe({
-            next: (user) => {
+        this.userService.getUserInfo().subscribe({
+            next: (user: UserInfo) => {
                 this.name$$.next(user.name);
                 this.isAdmin$$.next(user.role === 'admin'); 
             },
-            error: (err) => {
+            error: (err: any) => {
+                console.error("Error loading user info:", err);
                 this.name$$.next(null);
                 this.isAdmin$$.next(false);
             }
